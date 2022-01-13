@@ -7,12 +7,12 @@ import java.awt.Image;
 
 import java.awt.image.BufferedImage;
 public final class IconProvider {
-	public static BufferedImage playIcon = getFluentIcon("circled-play-96.png");
-	public static BufferedImage pauseIcon = getFluentIcon("pause-button-96.png");
-	public static BufferedImage forwardIcon = getFluentIcon("fast-forward-round-96.png");
-	public static BufferedImage rewindIcon = getFluentIcon("rewind-button-round-96.png");
+	public static BufferedImage playIcon = getFluentIcon("play-100.png");
+	public static BufferedImage pauseIcon = getFluentIcon("pause-100.png");
+	public static BufferedImage forwardIcon = getFluentIcon("fast-forward-100.png");
+	public static BufferedImage rewindIcon = getFluentIcon("rewind-100.png");
 	public static BufferedImage audioWaveIcon = getFluentIcon("audio-wave-96.png");
-	public static BufferedImage resetIcon = getFluentIcon("reset-96.png");
+	public static BufferedImage resetIcon = getFluentIcon("replay-100.png");
 	
 	public static Image audioWaveGif = getFluentGif("audio-wave.gif");
 

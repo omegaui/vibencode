@@ -88,7 +88,7 @@ public class MusicPlayerPlugin implements Plugin{
 	@Override
 	public URL getImage() {
 		try{
-			return getClass().getResource("/fluent-icons/icons8-circled-play-96.png");
+			return getClass().getResource("/fluent-icons/icons8-play-100.png");
 		}
 		catch(Exception e){
 			e.printStackTrace();
