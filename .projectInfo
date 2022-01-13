@@ -1,0 +1,26 @@
+>JDK Path
+-/usr/lib/jvm/jdk-17
+>Main Class
+-omega.Main
+>Language Tag
+-0
+>Project Classpath : Required Jars
+-project-root$/alljars/checker-qual-3.8.0.jar
+-project-root$/alljars/commons-io-2.6.jar
+-project-root$/alljars/error_prone_annotations-2.5.1.jar
+-project-root$/alljars/failureaccess-1.0.1.jar
+-project-root$/alljars/guava-30.1.1-jre.jar
+-project-root$/alljars/j2objc-annotations-1.3.jar
+-project-root$/alljars/jaudiotagger-2.2.7.jar
+-project-root$/alljars/java-stream-player-10.0.2.jar
+-project-root$/alljars/jflac-codec-1.5.2.jar
+-project-root$/alljars/jlayer-1.0.1.4.jar
+-project-root$/alljars/jorbis-0.0.17-2.jar
+-project-root$/alljars/jsr305-3.0.2.jar
+-project-root$/alljars/junit-3.8.2.jar
+-project-root$/alljars/mp3spi-1.9.5.4.jar
+-project-root$/alljars/tritonus-all-0.3.7.2.jar
+-project-root$/alljars/vorbis-support-1.1.0.jar
+-/home/ubuntu/Documents/Omega IDE/build/Omega IDE.jar
+>Project Classpath : Required Resource Roots
+-project-root$/res
