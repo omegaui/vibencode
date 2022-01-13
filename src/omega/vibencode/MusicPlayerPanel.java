@@ -1,4 +1,6 @@
 package omega.vibencode;
+import java.awt.BorderLayout;
+
 import omega.Screen;
 
 import omega.ui.dialog.FileSelectionDialog;
@@ -15,6 +17,7 @@ import com.goxr3plus.streamplayer.stream.StreamPlayerListener;
 import com.goxr3plus.streamplayer.stream.StreamPlayerEvent;
 
 import omegaui.component.TextComp;
+import omegaui.component.FlexPanel;
 
 import javax.swing.JPanel;
 
@@ -24,6 +27,9 @@ import static omegaui.component.animation.Animations.*;
 public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 	
 	private static final String TEXT0 = "Browse and Select a Music";
+
+	private FlexPanel flexPanel;
+	private JPanel panel;
 	
 	private TextComp viewComp;
 	
@@ -51,13 +57,22 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 	private int pointer;
 	
 	public MusicPlayerPanel(TextComp viewComp){
-		super(null);
+		super(new BorderLayout());
 		this.viewComp = viewComp;
 		setBackground(c2);
 		init();
 	}
 	
 	public void init(){
+		flexPanel = new FlexPanel(null, TOOLMENU_COLOR3_SHADE, null);
+		flexPanel.setArc(0, 0);
+		add(flexPanel, BorderLayout.CENTER);
+		
+		panel = new JPanel(null);
+		panel.setBackground(c2);
+		
+		flexPanel.add(panel);
+		
 		player = new StreamPlayer(){
 			@Override
 			public void open(File file) throws com.goxr3plus.streamplayer.stream.StreamPlayerException{
@@ -70,7 +85,7 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		queuePanel = new QueueView(this);
 		queueManager = new QueueManager();
 		
-		add(queuePanel);
+		panel.add(queuePanel);
 		
 		fileSelectionDialog = new FileSelectionDialog(Screen.getScreen());
 		fileSelectionDialog.setTitle("Select a Music File (only .wav is supported)");
@@ -78,7 +93,7 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		
 		gifComp = new TextComp("", c2, c2, c2, null);
 		gifComp.setImage(IconProvider.audioWaveIcon, 48, 48);
-		add(gifComp);
+		panel.add(gifComp);
 		
 		titleComp = new TextComp(TEXT0, c2, c2, glow, null);
 		titleComp.setFont(PX14);
@@ -86,28 +101,28 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		titleComp.setPaintGradientEnabled(true);
 		titleComp.setGradientColor(TOOLMENU_GRADIENT);
 		titleComp.setClickable(false);
-		add(titleComp);
+		panel.add(titleComp);
 		
 		playOrPauseComp = new TextComp(IconProvider.playIcon, 24, 24, TOOLMENU_COLOR3_SHADE, back2, back2, this::togglePlayOrPause);
 		playOrPauseComp.setArc(15, 15);
-		add(playOrPauseComp);
+		panel.add(playOrPauseComp);
 		
 		goLeftComp = new TextComp(IconProvider.rewindIcon, 24, 24, TOOLMENU_COLOR3_SHADE, back2, back2, this::goUpInQueue);
 		goLeftComp.setArc(15, 15);
-		add(goLeftComp);
+		panel.add(goLeftComp);
 		
 		goRightComp = new TextComp(IconProvider.forwardIcon, 24, 24, TOOLMENU_COLOR3_SHADE, back2, back2, this::goDownInQueue);
 		goRightComp.setArc(15, 15);
-		add(goRightComp);
+		panel.add(goRightComp);
 		
 		replayComp = new TextComp(IconProvider.resetIcon, 24, 24, TOOLMENU_COLOR3_SHADE, back1, back2, this::replay);
 		replayComp.setArc(15, 15);
-		add(replayComp);
+		panel.add(replayComp);
 		
 		updateQueueComp = new TextComp("Add To Queue", TOOLMENU_COLOR5_SHADE, back2, TOOLMENU_COLOR5, ()->addMoreToQueue());
 		updateQueueComp.setFont(PX14);
 		updateQueueComp.setArc(5, 5);
-		add(updateQueueComp);
+		panel.add(updateQueueComp);
 		
 		putAnimationLayer(playOrPauseComp, getImageSizeAnimationLayer(20, +5, true), ACTION_MOUSE_ENTERED);
 	}
@@ -225,6 +240,8 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 	
 	@Override
 	public void layout(){
+		flexPanel.setBounds(0, 0, getWidth(), getHeight());
+		panel.setBounds(5, 5, flexPanel.getWidth() - 10, flexPanel.getHeight() - 10);
 		gifComp.setBounds(getWidth()/2 - 24, 10, 48, 48);
 		titleComp.setBounds(0, 70, getWidth(), 30);
 		playOrPauseComp.setBounds(getWidth()/2 - 15, 110, 30, 30);

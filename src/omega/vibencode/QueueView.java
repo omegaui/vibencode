@@ -51,7 +51,7 @@ public class QueueView extends JPanel{
 		for(String path : paths){
 			File file = new File(path);
 			TextComp comp = new TextComp(file.getName(), TOOLMENU_COLOR1_SHADE, back2, glow, ()->musicPlayerPanel.play(file));
-			comp.setBounds(0, block, 290, 25);
+			comp.setBounds(0, block, 280, 25);
 			comp.setFont(PX14);
 			comp.setArc(0, 0);
 			comp.alignX = 5;

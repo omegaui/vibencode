@@ -4,10 +4,6 @@
 -omega.Main
 >Language Tag
 -0
->Opened Editors on Main Tab Panel
--project-root$/src/omega/vibencode/MusicPlayerPlugin.java
--project-root$/src/omega/vibencode/MusicPlayerPanel.java
--project-root$/src/omega/Main.java
 >Project Classpath : Required Jars
 -project-root$/lib/checker-qual-3.8.0.jar
 -project-root$/lib/commons-io-2.6.jar
