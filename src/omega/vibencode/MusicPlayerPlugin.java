@@ -83,7 +83,7 @@ public class MusicPlayerPlugin implements Plugin{
 	}
 	@Override
 	public String getSizeInMegaBytes() {
-		return "2.2 MB";
+		return "5.6 MB";
 	}
 	@Override
 	public URL getImage() {
