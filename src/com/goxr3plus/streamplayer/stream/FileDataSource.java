@@ -1,5 +1,4 @@
 package com.goxr3plus.streamplayer.stream;
-
 import com.goxr3plus.streamplayer.enums.AudioType;
 import com.goxr3plus.streamplayer.tools.TimeTool;
 
@@ -27,6 +26,7 @@ public class FileDataSource implements DataSource {
     @Override
     public AudioInputStream getAudioInputStream() throws UnsupportedAudioFileException, IOException {
         return AudioSystem.getAudioInputStream(source);
+//		return new JS_MP3FileReader().getAudioInputStream(source);
     }
 
     @Override

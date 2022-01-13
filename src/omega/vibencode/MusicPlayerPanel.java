@@ -22,7 +22,7 @@ import static omega.io.UIManager.*;
 import static omegaui.component.animation.Animations.*;
 
 public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
-
+	
 	private static final String TEXT0 = "Browse and Select a Music";
 	
 	private TextComp viewComp;
@@ -47,7 +47,7 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 	public QueueView queuePanel;
 	
 	private FileSelectionDialog fileSelectionDialog;
-
+	
 	private int pointer;
 	
 	public MusicPlayerPanel(TextComp viewComp){
@@ -73,8 +73,8 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		add(queuePanel);
 		
 		fileSelectionDialog = new FileSelectionDialog(Screen.getScreen());
-		fileSelectionDialog.setTitle("Select a Music File (.mp3 or .wav)");
-		fileSelectionDialog.setFileExtensions(".mp3", ".wav");
+		fileSelectionDialog.setTitle("Select a Music File (only .wav is supported)");
+		fileSelectionDialog.setFileExtensions(".wav");
 		
 		gifComp = new TextComp("", c2, c2, c2, null);
 		gifComp.setImage(IconProvider.audioWaveIcon, 48, 48);
@@ -99,7 +99,7 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		goRightComp = new TextComp(IconProvider.forwardIcon, 24, 24, TOOLMENU_COLOR3_SHADE, back2, back2, this::goDownInQueue);
 		goRightComp.setArc(15, 15);
 		add(goRightComp);
-
+		
 		replayComp = new TextComp(IconProvider.resetIcon, 24, 24, TOOLMENU_COLOR3_SHADE, back1, back2, this::replay);
 		replayComp.setArc(15, 15);
 		add(replayComp);
@@ -111,7 +111,7 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		
 		putAnimationLayer(playOrPauseComp, getImageSizeAnimationLayer(20, +5, true), ACTION_MOUSE_ENTERED);
 	}
-
+	
 	public void replay(){
 		if(currentFile == null)
 			return;
@@ -120,13 +120,13 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		reset();
 		play(x);
 	}
-
+	
 	public void goUpInQueue(){
 		if(pointer - 1 >= 0)
 			pointer--;
 		play(new File(queueManager.musicFilePaths.get(pointer)));
 	}
-
+	
 	public void goDownInQueue(){
 		if(pointer + 1 < queueManager.musicFilePaths.size())
 			pointer++;
@@ -187,7 +187,7 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void reset(){
 		player.stop();
 		currentFile = null;
@@ -209,8 +209,8 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 	}
 	
 	@Override
-	public void opened(final Object dataSource, final Map<String, Object> properties) {
-		
+	public void opened(Object dataSource, Map<String, Object> properties) {
+		updateView();
 	}
 	
 	@Override
@@ -219,32 +219,8 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 	}
 	
 	@Override
-	public void statusUpdated(final StreamPlayerEvent streamPlayerEvent) {
+	public void statusUpdated(StreamPlayerEvent streamPlayerEvent) {
 		
-		// Player status
-		final Status status = streamPlayerEvent.getPlayerStatus();
-		// System.out.println(streamPlayerEvent.getPlayerStatus());
-		
-		// Examples
-		
-		if (status == Status.OPENED) {
-			
-			} else if (status == Status.OPENING) {
-			
-			} else if (status == Status.RESUMED) {
-			
-			} else if (status == Status.PLAYING) {
-			
-			} else if (status == Status.STOPPED) {
-			
-			} else if (status == Status.SEEKING) {
-			
-			} else if (status == Status.SEEKED) {
-			
-		}
-		
-		// etc... SEE XR3PLAYER https://github.com/goxr3plus/XR3Player for advanced
-		// examples
 	}
 	
 	@Override
@@ -267,7 +243,7 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		}
 		super.setVisible(value);
 	}
-
+	
 	public omega.vibencode.QueueManager getQueueManager() {
 		return queueManager;
 	}
