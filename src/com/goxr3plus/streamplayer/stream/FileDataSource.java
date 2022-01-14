@@ -20,13 +20,16 @@ public class FileDataSource implements DataSource {
 
     @Override
     public AudioFileFormat getAudioFileFormat() throws UnsupportedAudioFileException, IOException {
+    	if(source.getName().endsWith(".mp3"))
+    		return new javazoom.spi.mpeg.sampled.file.MpegAudioFileReader().getAudioFileFormat(source);
         return AudioSystem.getAudioFileFormat(this.source);
     }
 
     @Override
     public AudioInputStream getAudioInputStream() throws UnsupportedAudioFileException, IOException {
+    	if(source.getName().endsWith(".mp3"))
+    		return new javazoom.spi.mpeg.sampled.file.MpegAudioFileReader().getAudioInputStream(source);
         return AudioSystem.getAudioInputStream(source);
-//		return new JS_MP3FileReader().getAudioInputStream(source);
     }
 
     @Override

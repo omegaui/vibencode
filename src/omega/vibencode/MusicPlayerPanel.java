@@ -1,5 +1,12 @@
 package omega.vibencode;
+import java.awt.event.MouseEvent;
+
+import omegaui.component.listener.SlideListener;
+
+import omega.io.UIManager;
+
 import java.awt.BorderLayout;
+import java.awt.Font;
 
 import omega.Screen;
 
@@ -18,13 +25,14 @@ import com.goxr3plus.streamplayer.stream.StreamPlayerEvent;
 
 import omegaui.component.TextComp;
 import omegaui.component.FlexPanel;
+import omegaui.component.SliderComp;
 
 import javax.swing.JPanel;
 
 import static omega.io.UIManager.*;
 import static omegaui.component.animation.Animations.*;
 
-public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
+public class MusicPlayerPanel extends JPanel implements StreamPlayerListener, SlideListener{
 	
 	private static final String TEXT0 = "Browse and Select a Music";
 
@@ -36,6 +44,8 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 	private TextComp gifComp;
 	
 	private TextComp titleComp;
+
+	private SliderComp timeLineComp;
 	
 	private TextComp goLeftComp;
 	private TextComp playOrPauseComp;
@@ -55,6 +65,14 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 	private FileSelectionDialog fileSelectionDialog;
 	
 	private int pointer;
+	
+	private long totalBytes;
+	
+	private int totalDuration;
+
+	private volatile boolean seeked = false;
+
+	private int seekedSeconds;
 	
 	public MusicPlayerPanel(TextComp viewComp){
 		super(new BorderLayout());
@@ -102,6 +120,16 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		titleComp.setGradientColor(TOOLMENU_GRADIENT);
 		titleComp.setClickable(false);
 		panel.add(titleComp);
+
+		timeLineComp = new SliderComp(TOOLMENU_COLOR2_SHADE, TOOLMENU_COLOR4_SHADE, TOOLMENU_COLOR3, glow);
+		timeLineComp.setMinMaxValueTextFont(UBUNTU_PX12);
+		timeLineComp.setValueTextFont(timeLineComp.getMinMaxValueTextFont());
+		timeLineComp.setMinMaxValueTextColor(TOOLMENU_COLOR3);
+		timeLineComp.setValueTextColor(TOOLMENU_COLOR2);
+		timeLineComp.setValueUnit(" s");
+		timeLineComp.setPaintValuesEnabled(true);
+		timeLineComp.setSlideListener(this);
+		panel.add(timeLineComp);
 		
 		playOrPauseComp = new TextComp(IconProvider.playIcon, 24, 24, TOOLMENU_COLOR3_SHADE, back2, back2, this::togglePlayOrPause);
 		playOrPauseComp.setArc(15, 15);
@@ -162,7 +190,6 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 	
 	public void togglePlayOrPause(){
 		try{
-			
 			if(currentFile == null)
 				return;
 			
@@ -194,6 +221,14 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 			
 			player.open(file);
 			
+			timeLineComp.setMaxValue(player.getDurationInSeconds());
+			timeLineComp.setPaintValuesEnabled(true);
+
+			totalBytes = player.getTotalBytes();
+			totalDuration = player.getDurationInSeconds();
+			
+			seekedSeconds = 0;
+			
 			player.play();
 			
 			updateView();
@@ -207,6 +242,7 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		player.stop();
 		currentFile = null;
 		titleComp.setText(TEXT0);
+		timeLineComp.setPaintValuesEnabled(false);
 		updateView();
 	}
 	
@@ -224,17 +260,31 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 	}
 	
 	@Override
-	public void opened(Object dataSource, Map<String, Object> properties) {
-		updateView();
+	public void onValueChanged(int value) {
+		try{
+			if(isPlaying()){
+				seekedSeconds = value;
+				player.seekTo(value);
+				updateView();
+			}
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
-	public void progress(int nEncodedBytes, long microsecondPosition, byte[] pcmData, Map<String, Object> properties) {
+	public void opened(Object dataSource, Map<String, Object> properties) {
 		
 	}
 	
 	@Override
-	public void statusUpdated(StreamPlayerEvent streamPlayerEvent) {
+	public void progress(int nEncodedBytes, long microsecondPosition, byte[] pcmData, Map<String, Object> properties) {
+		timeLineComp.setValue(seekedSeconds + (int)(microsecondPosition / 1000000));
+	}
+	
+	@Override
+	public void statusUpdated(StreamPlayerEvent e) {
 		
 	}
 	
@@ -244,12 +294,13 @@ public class MusicPlayerPanel extends JPanel implements StreamPlayerListener{
 		panel.setBounds(5, 5, flexPanel.getWidth() - 10, flexPanel.getHeight() - 10);
 		gifComp.setBounds(getWidth()/2 - 24, 10, 48, 48);
 		titleComp.setBounds(0, 70, getWidth(), 30);
-		playOrPauseComp.setBounds(getWidth()/2 - 15, 110, 30, 30);
-		goLeftComp.setBounds(playOrPauseComp.getX() - 60, 113, 26, 26);
-		goRightComp.setBounds(playOrPauseComp.getX() + 30 + 35, 113, 26, 26);
-		replayComp.setBounds(getWidth()/2 - 30/2, 150, 30, 30);
-		updateQueueComp.setBounds(getWidth()/2 - 150/2, 195, 150, 25);
-		queuePanel.setBounds(5, 230, getWidth() - 10, getHeight() - 232);
+		timeLineComp.setBounds(10, 110, getWidth() - 30, 40);
+		playOrPauseComp.setBounds(getWidth()/2 - 15, 150, 30, 30);
+		goLeftComp.setBounds(playOrPauseComp.getX() - 60, 153, 26, 26);
+		goRightComp.setBounds(playOrPauseComp.getX() + 30 + 35, 153, 26, 26);
+		replayComp.setBounds(getWidth()/2 - 30/2, 190, 30, 30);
+		updateQueueComp.setBounds(getWidth()/2 - 150/2, 235, 150, 25);
+		queuePanel.setBounds(5, 270, getWidth() - 10, getHeight() - 272);
 		super.layout();
 	}
 	
